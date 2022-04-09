@@ -1,0 +1,10 @@
+paddlenlp
+paddlepaddle
+semver
+typed-argument-parser
+numpy
+dataclasses-json
+tqdm
+paddlenlp
+loguru
+visualdl
