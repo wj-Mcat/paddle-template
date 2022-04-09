@@ -1,0 +1,17 @@
+name: Python Unit Test
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
+    - name: Install dependencies
+      run: make install
+    - name: Run Test
+      run:  make test
