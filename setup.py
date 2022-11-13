@@ -71,7 +71,7 @@ setuptools.setup(
     long_description=get_long_description(),
     long_description_content_type='text/markdown',
     license='Apache-2.0',
-    url='https://github.com/wj-Mcat/paddle-models-template',
+    url='https://github.com/wj-Mcat/paddle-template',
     packages=setuptools.find_packages(),
     include_package_data=True,
     install_requires=get_install_requires(),
