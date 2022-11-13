@@ -47,7 +47,7 @@ version:
 
 .PHONY: deploy-version
 deploy-version:
-	echo "version = '$$(cat VERSION)'" > src/paddle_prompt/version.py
+	echo "version = '$$(cat VERSION)'" > paddle_template/version.py
 
 .PHONY: doc
 doc:
