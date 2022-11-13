@@ -20,7 +20,7 @@ pylint:
 
 .PHONY: pytest
 pytest:
-	pytest tests
+	pytest --cov=paddle_template tests/
 
 
 .PHONY: install
@@ -31,7 +31,9 @@ install:
 	# $(MAKE) install-git-hook
 
 .PHONY: test
-test: pylint pytest
+test: 
+	make pylint
+	make pytest
 
 format:
 	isort paddle_template/ tests 

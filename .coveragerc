@@ -1,0 +1,3 @@
+[run]
+include =
+    paddle_template/*
