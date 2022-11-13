@@ -27,10 +27,14 @@ pytest:
 install:
 	pip3 install -r requirements.txt
 	pip3 install -r requirements-dev.txt
+	pip3 install -r requirements-speech.txt
 	# $(MAKE) install-git-hook
 
 .PHONY: test
 test: pylint pytest
+
+format:
+	isort paddle_template/ tests 
 
 .PHONY: version
 version:

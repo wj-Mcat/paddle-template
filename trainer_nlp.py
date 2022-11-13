@@ -37,10 +37,10 @@ from paddlenlp.transformers.tokenizer_utils import PretrainedTokenizer
 from tqdm import tqdm
 from visualdl import LogWriter
 
-from src.data_processors import DataProcessor
-from src.config import get_logger, Config, Tensor
-from src.schema import InputExample, ExampleDataset
-from src.utils import num
+from paddle_template.data_processors import DataProcessor
+from paddle_template.config import get_logger, Config, Tensor
+from paddle_template.schema import InputExample, ExampleDataset
+from paddle_template.utils import num
 
 
 logger = get_logger()

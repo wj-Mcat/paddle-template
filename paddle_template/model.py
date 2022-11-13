@@ -27,6 +27,7 @@ class Net(nn.Layer):
 
 class SoundClassifier(nn.Layer):
     """simple sound classifier"""
+
     def __init__(self, backbone: nn.Layer, num_class: int, dropout=0.1):
         super().__init__()
         self.backbone = backbone
@@ -40,4 +41,3 @@ class SoundClassifier(nn.Layer):
         logits = self.fc(x)
 
         return logits
-    

@@ -12,11 +12,11 @@ from paddleaudio.features import LogMelSpectrogram
 from paddleaudio.datasets import ESC50
 from paddlenlp.utils.log import logger
 from tqdm import tqdm
-from src.data_processors import AudioDataProcessor
-from src.config import Config
-from src.trainer import Trainer
-from src.schema import AudioInputExample
-from src.model import SoundClassifier
+from paddle_template.data_processors import AudioDataProcessor
+from paddle_template.config import Config
+from paddle_template.trainer import Trainer
+from paddle_template.schema import AudioInputExample
+from paddle_template.model import SoundClassifier
 
 
 class SpeechConfig(Config):

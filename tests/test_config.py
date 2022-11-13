@@ -1,4 +1,6 @@
-from src.config import (
+from __future__ import annotations
+
+from paddle_template.config import (
     MetricReport, 
     TrainConfigMixin,
     PredictConfigMixin,

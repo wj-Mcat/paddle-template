@@ -1,0 +1,3 @@
+paddlenlp
+ppdiffusers
+paddle-pipelines

@@ -13,3 +13,5 @@ pre-commit
 mkdocs
 mkdocs-material
 types-requests
+isort
+black

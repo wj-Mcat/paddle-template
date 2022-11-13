@@ -31,8 +31,9 @@ from paddle.io import Dataset
 @dataclass
 class InputExample:
     """Input Example Data Structure for training data
-    this structure can support multi nlp tasks, eg: 
+    this structure can support multi nlp tasks, eg:
     """
+
     text_a: str  # source sentence
     label: Union[str, List[str]]  # label field
 
@@ -67,8 +68,7 @@ class AudioInputExample:
 
 
 class ExampleDataset(Dataset):
-    """Dataset Wrapper for InputExample
-    """
+    """Dataset Wrapper for InputExample"""
 
     def __init__(self, examples: List[InputExample]):
         super().__init__()
@@ -92,4 +92,3 @@ class ExampleDataset(Dataset):
 
     def __getitem__(self, idx: int):
         return self.examples[idx]
-
