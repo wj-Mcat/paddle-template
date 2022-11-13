@@ -33,10 +33,19 @@ install:
 .PHONY: test
 test: 
 	make pylint
-	make pytest
+	make pytest	
 
 format:
-	isort paddle_template/ tests 
+	isort paddle_template/ tests/
+	black paddle_template/ tests/
+
+.PHONY: dist
+dist:
+	python3 setup.py sdist bdist_wheel
+
+.PHONY: publish
+publish:
+	PATH=~/.local/bin:${PATH} twine upload dist/*
 
 .PHONY: version
 version:
