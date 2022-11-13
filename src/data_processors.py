@@ -24,6 +24,9 @@ import json
 from abc import ABC
 from typing import List, Union
 
+import numpy as np
+from numpy import ndarray
+
 from src.schema import InputExample
 
 
@@ -86,3 +89,37 @@ class TNewsDataProcessor(DataProcessor):
 
     def get_labels(self) -> List[str]:
         return self.train_labels
+
+
+class AudioDataProcessor(DataProcessor):
+    def __init__(self, dataset_name: str = None, sr: int = 32000) -> None:
+        super().__init__()
+        self.sr = sr
+        
+        if os.path.isdir(dataset_name):
+            # read the local dir
+            pass
+        else:
+            pass
+    
+    def _read_file(self, audio_file: str) -> ndarray:
+        from paddleaudio import load
+        data, sr = load(audio_file, sr=32000, mono=True)
+        return data
+    
+    # def _read_examples(self, )
+
+    def get_train_examples(self) -> List[InputExample]:
+        from paddleaudio.datasets import ESC50
+        train_ds = ESC50(mode='train', sample_rate=self.sr)
+        return train_ds
+    
+    def get_dev_examples(self) -> List[InputExample]:
+        from paddleaudio.datasets import ESC50
+        dev_ds = ESC50(mode='dev', sample_rate=self.sr)
+        return dev_ds
+
+    def get_test_examples(self) -> List[InputExample]:
+        from paddleaudio.datasets import ESC50
+        dev_ds = ESC50(mode='test', sample_rate=self.sr)
+        return dev_ds

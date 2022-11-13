@@ -79,10 +79,11 @@ class Trainer:
         self, config: Config,
         processor: DataProcessor, tokenizer: PretrainedTokenizer,
         model, criterion: Layer,
-        optimizer: Optimizer
+        lr_scheduler: LRScheduler,
     ) -> None:
         self.config: Config = config
         self.set_device()
+        self.lr_scheduler = lr_scheduler
 
         # 2. build data related objects
         self.data_processor = processor
@@ -102,7 +103,7 @@ class Trainer:
             if not any(nd in n for nd in ["bias", "norm"])
         ]
         self.optimizer: Optimizer = paddle.optimizer.AdamW(
-            learning_rate=self.lr_scheduler,
+            learning_rate=lr_scheduler,
             parameters=self.model.parameters(),
             weight_decay=config.weight_decay,
             apply_decay_param_fun=lambda x: x in decay_params)
@@ -154,9 +155,10 @@ class Trainer:
     def set_device(self):
         """set paddle device
         """
-        paddle.set_device(self.config.device)
-        if paddle.distributed.get_world_size() > 1:
-            paddle.distributed.init_parallel_env()
+        pass
+        # paddle.set_device(self.config.device)
+        # if paddle.distributed.get_world_size() > 1:
+        #     paddle.distributed.init_parallel_env()
 
     @paddle.no_grad()
     def evaluate(self, dataloader: DataLoader, mode: str = 'dev'):
@@ -230,6 +232,7 @@ class Trainer:
         bar_info.append(f'train-loss: {num(self.context_data.loss):10.6f}')
         bar_info.append(f'train-acc: {self.context_data.train_acc:10.6f}')
         bar_info.append(f'dev-acc: {self.context_data.dev_acc:10.6f}')
+        bar_info.append(f'last-lr: {self.lr_scheduler.last_lr:10.6f}')
 
         self.train_bar.set_description('\t'.join(bar_info))
 
@@ -314,4 +317,3 @@ class Trainer:
 
     def predict(self, example: InputExample):
         """predict the example"""
-

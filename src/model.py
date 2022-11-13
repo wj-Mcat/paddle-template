@@ -23,3 +23,21 @@ from paddle import nn
 
 class Net(nn.Layer):
     pass
+
+
+class SoundClassifier(nn.Layer):
+    """simple sound classifier"""
+    def __init__(self, backbone: nn.Layer, num_class: int, dropout=0.1):
+        super().__init__()
+        self.backbone = backbone
+        self.dropout = nn.Dropout(dropout)
+        self.fc = nn.Linear(self.backbone.emb_size, num_class)
+
+    def forward(self, x):
+        x = x.unsqueeze(1)
+        x = self.backbone(x)
+        x = self.dropout(x)
+        logits = self.fc(x)
+
+        return logits
+    

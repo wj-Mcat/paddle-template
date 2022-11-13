@@ -23,6 +23,7 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 from dataclasses_json import dataclass_json
+from numpy import ndarray
 from paddle.io import Dataset
 
 
@@ -57,6 +58,14 @@ class InputExample:
         return self.text_a
 
 
+@dataclass_json
+@dataclass
+class AudioInputExample:
+    data: ndarray
+    sr: ndarray
+    label: str
+
+
 class ExampleDataset(Dataset):
     """Dataset Wrapper for InputExample
     """
@@ -69,7 +78,6 @@ class ExampleDataset(Dataset):
     @staticmethod
     def get_label2idx(examples: List[InputExample]) -> Dict[str, int]:
         label2idx: Dict[str, int] = OrderedDict()
-
         for example in examples:
             if isinstance(example.label, str):
                 labels = [example.label]
@@ -84,3 +92,4 @@ class ExampleDataset(Dataset):
 
     def __getitem__(self, idx: int):
         return self.examples[idx]
+
