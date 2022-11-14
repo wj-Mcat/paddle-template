@@ -25,26 +25,102 @@ from abc import ABC
 from typing import List, Union
 
 import numpy as np
+import paddle
 from numpy import ndarray
+from paddle.io import DataLoader
+from paddlenlp.transformers import AutoTokenizer, PretrainedTokenizer
 
+from paddle_template.config import TextClassificationConfig
 from paddle_template.schema import InputExample
 
 
 class DataProcessor(ABC):
     """Abstract Data Processor Class which handle the different corpus"""
 
+    def convert_examples_to_features(self, examples: List[InputExample]):
+        raise NotImplementedError
+
     def get_train_examples(self) -> List[InputExample]:
         """get_train_examples"""
+        raise NotImplementedError
+
+    def get_train_dataloader(self) -> DataLoader:
         raise NotImplementedError
 
     def get_test_examples(self) -> List[InputExample]:
         raise NotImplementedError
 
+    def get_test_dataloader(self) -> DataLoader:
+        raise NotImplementedError
+
     def get_dev_examples(self) -> List[InputExample]:
+        raise NotImplementedError
+
+    def get_dev_dataloader(self) -> List[InputExample]:
         raise NotImplementedError
 
     def get_labels(self) -> List[str]:
         pass
+
+
+class TextClassificationJsonReaderMixin:
+    """the file data structure is json file"""
+
+    def _read(self, file: str) -> List[InputExample]:
+        examples = []
+
+        with open(file, "r", encoding="utf-8") as f:
+            for line in f:
+                data = json.loads(line)
+                examples.append(InputExample(**data))
+
+        return examples
+
+
+class TextClassificationDataProcessor(DataProcessor, TextClassificationJsonReaderMixin):
+    """process the text-classification corpus to features which can be feed into model"""
+
+    def __init__(self, config: TextClassificationConfig) -> None:
+        super().__init__()
+
+        self.tokenizer: PretrainedTokenizer = AutoTokenizer.from_pretrained(
+            config.pretrained_model_or_path
+        )
+        self.config: TextClassificationConfig = config
+
+    def convert_examples_to_features(self, examples: List[InputExample]):
+        """convert examples to features(inputs to pretrained model)
+
+        Args:
+            examples (List[InputExample]): the batch data of examples
+
+        Returns:
+            Dict[str, Tensor]: the final features feed into model
+        """
+        sentences = [example.text_a for example in examples]
+        features = self.tokenizer.batch_encode(
+            sentences,
+            padding="max_length",
+            return_tensors="pd",
+        )
+        labels = paddle.to_tensor(
+            [self.config.label2idx[example.label] for example in examples],
+            dtype="int32",
+        )
+        features["labels"] = labels
+        return features
+
+    def get_train_examples(self) -> List[InputExample]:
+        file = os.path.join(self.config.data_dir, "train.json")
+        return self._read(file)
+
+    def get_test_examples(self) -> List[InputExample]:
+        file = os.path.join(self.config.data_dir, "test.json")
+        return self._read(file)
+
+    def get_eval_examples(self) -> List[InputExample]:
+        file = os.path.join(self.config.data_dir, "eval.json")
+        return self._read(file)
 
 
 class TNewsDataProcessor(DataProcessor):

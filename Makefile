@@ -1,5 +1,7 @@
 PYTHONPATH=./
-SOURCE_GLOB=$(wildcard src/**.py tests/**.py examples/**.py)
+SOURCE_GLOB=$(wildcard paddle_template/**.py examples/**.py)
+
+TEST_SOURCE_GLOB=$(wildcard tests/**.py)
 
 IGNORE_PEP=E203,E221,E241,E272,E501,F811
 
@@ -14,9 +16,7 @@ clean:
 # disable: TODO list temporay
 .PHONY: pylint
 pylint:
-	pylint \
-		--load-plugins pylint_quotes \
-		$(SOURCE_GLOB)
+	pylint --load-plugins pylint_quotes $(SOURCE_GLOB)
 
 .PHONY: pytest
 pytest:
@@ -28,11 +28,12 @@ install:
 	pip3 install -r requirements.txt
 	pip3 install -r requirements-dev.txt
 	pip3 install -r requirements-speech.txt
+	pip3 install -r requirements-nlp.txt
 	# $(MAKE) install-git-hook
 
 .PHONY: test
 test: 
-	make pylint
+	# make pylint
 	make pytest	
 
 format:

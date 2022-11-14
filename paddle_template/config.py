@@ -85,18 +85,14 @@ class TrainConfigMixin(Tap):
         return label2words
 
 
-class PredictConfigMixin(Tap):
-    model_path: Optional[str] = None  # The path of weight of model.
-
-
 class ModelConfigMixin(Tap):
-    pretrained_model: str = "ernie-1.0"  # the pretrained moddel name
+    pretrained_model_or_path: str = "ernie-1.0"  # the pretrained moddel name
 
     # this config is related model configuration
     # hidden_size: int = 768  # The size of hidden states.
 
 
-class Config(TrainConfigMixin, PredictConfigMixin, ModelConfigMixin):
+class Config(TrainConfigMixin, ModelConfigMixin):
     """Global Configuration"""
 
     def __init__(self, file: str = None, **kwargs):
@@ -123,6 +119,10 @@ class Config(TrainConfigMixin, PredictConfigMixin, ModelConfigMixin):
         if self.device == "cpu":
             return paddle.CPUPlace()
         return paddle.CUDAPlace(0)
+
+
+class TextClassificationConfig(Config):
+    num_labels: int = 2  # the number of target num labels
 
 
 @dataclass
